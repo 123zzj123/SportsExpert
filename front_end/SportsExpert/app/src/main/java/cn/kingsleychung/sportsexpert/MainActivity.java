@@ -1,5 +1,6 @@
 package cn.kingsleychung.sportsexpert;
 
+//import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,5 +10,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        Intent intent = new Intent(); //调用照相机
+//        intent.setAction("android.media.action.STILL_IMAGE_CAMERA");
+//        startActivity(intent);
     }
 }
