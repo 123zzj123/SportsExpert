@@ -4,4 +4,32 @@
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="Knowledage">知识库</string>
+    <string-array name="sports">
+        <item>篮球</item>
+        <item>网球</item>
+        <item>足球</item>
+        <item>羽毛球</item>
+        <item>排球</item>
+        <item>乒乓球</item>
+        <item>跑步</item>
+        <item>游泳</item>
+        <item>举重</item>
+        <item>高尔夫</item>
+        <item>跨栏</item>
+        <item>射箭</item>
+    </string-array>
+    <string-array  name="ImgSourceId">
+        <item>ic_launcher</item>
+        <item>ic_launcher</item>
+        <item>ic_launcher</item>
+        <item>ic_launcher</item>
+        <item>ic_launcher</item>
+        <item>ic_launcher</item>
+    </string-array>
+    <string-array  name="Message" formatted = "false">
+        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
+        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
+        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
+    </string-array>
 </resources>

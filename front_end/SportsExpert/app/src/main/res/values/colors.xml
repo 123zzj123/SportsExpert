@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="control_background">#cc4285f4</color>
+    <color name="black">#000000</color><!-- 黑色-->
+    <color name="blue">#4A4AFF</color><!-- 蓝色 -->
+    <color name="yellow">#f9f900</color><!--黄色-->
+    <color name="mistyrose">#ffe4e1</color> <!-- 浅玫瑰色 --> 
 </resources>
