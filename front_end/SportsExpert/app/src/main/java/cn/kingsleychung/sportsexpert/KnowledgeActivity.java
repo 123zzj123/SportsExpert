@@ -1,6 +1,7 @@
 package cn.kingsleychung.sportsexpert;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -124,6 +125,8 @@ public class KnowledgeActivity extends FragmentActivity{
                     //Map<String, Object> item = (Map<String, Object>) parent.getItemAtPosition(position);
                     //Toast.makeText(getApplicationContext(), item.get("image").toString(), 0).show();
                     Toast.makeText(KnowledgeActivity.this,"hello"+ view.getId(),Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(KnowledgeActivity.this,DetailActivity.class);
+                    startActivity(intent);
                 }
             });
         }
@@ -229,6 +232,8 @@ public class KnowledgeActivity extends FragmentActivity{
             @Override
             public void onClick(View view) {
                 Toast.makeText(KnowledgeActivity.this,"正在前往拍照界面",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(KnowledgeActivity.this,CameraActivity.class);
+                startActivity(intent);
             }
         });
 

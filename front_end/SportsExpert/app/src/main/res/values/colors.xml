@@ -8,4 +8,6 @@
     <color name="blue">#4A4AFF</color><!-- 蓝色 -->
     <color name="yellow">#f9f900</color><!--黄色-->
     <color name="mistyrose">#ffe4e1</color> <!-- 浅玫瑰色 --> 
+    <color name="green">#99cc33</color> <!-- 绿色 -->
+    <color name="mediumvioletred">#c71585</color> <!-- 中紫罗兰色 -->
 </resources>

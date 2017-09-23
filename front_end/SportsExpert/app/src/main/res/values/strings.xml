@@ -19,17 +19,11 @@
         <item>跨栏</item>
         <item>射箭</item>
     </string-array>
-    <string-array  name="ImgSourceId">
-        <item>ic_launcher</item>
-        <item>ic_launcher</item>
-        <item>ic_launcher</item>
-        <item>ic_launcher</item>
-        <item>ic_launcher</item>
-        <item>ic_launcher</item>
-    </string-array>
-    <string-array  name="Message" formatted = "false">
-        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
-        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
-        <item>http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg</item>
-    </string-array>
+    <string name="KoBe" formatted="false">http://news.baidu.com/ns?cl=2&amp;rn=20&amp;tn=news&amp;word=%E7%A7%91%E6%AF%94</string>
+    <string name="BaiduBaike">
+        https://baike.baidu.com
+    </string>
+    <string name="KoBeDetail" formatted="false">
+        https://baike.baidu.com/item/%E7%A7%91%E6%AF%94%C2%B7%E5%B8%83%E8%8E%B1%E6%81%A9%E7%89%B9/318773?fr=aladdin&amp;fromid=133066&amp;fromtitle=%E7%A7%91%E6%AF%94
+    </string>
 </resources>

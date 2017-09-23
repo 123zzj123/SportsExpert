@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="回归！科比下赛季确定复出 以新身份"
+            android:padding = "5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+    />
+    <TextView
+            android:id="@+id/from"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/title"
+            android:text="凤凰体育"
+            android:layout_margin="3dp"
+    />
+    <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/from"
+            android:textSize="18dp"
+            android:text="王适娴:赛程对自己是考验"
+            android:textColor="@color/green"
+    />
+</RelativeLayout>
