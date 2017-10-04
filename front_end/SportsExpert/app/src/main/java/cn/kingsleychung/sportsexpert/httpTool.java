@@ -47,7 +47,10 @@ public class httpTool {
 
     //函数部分
     protected static Response postObject(String url, JSONObject jobj) {
-        RequestBody body = RequestBody.create(JSON, jobj.toString());
+        RequestBody body = RequestBody.create(JSON, "{}");
+        if (jobj != null) {
+            body = RequestBody.create(JSON, jobj.toString());
+        }
         Request req = new Request.Builder().url(url)
                 .post(body)
                 .addHeader("Content-Type", "application/json")
