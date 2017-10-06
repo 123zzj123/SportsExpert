@@ -29,11 +29,13 @@ public class NewsActivity extends Activity implements AdapterView.OnItemClickLis
     private List<String> NewsUrl = new ArrayList<String>();
     private MyAdapter myAdapter;
     private int end = 0;
+    private String newsAddress;
     private AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+        newsAddress = getIntent().getStringExtra("newsAddress");
         mListView= (LoadMoreListView) findViewById(R.id.List);
         init();
         myAdapter = new MyAdapter(NewsActivity.this,data);
@@ -57,7 +59,7 @@ public class NewsActivity extends Activity implements AdapterView.OnItemClickLis
             @Override
             public void run() {
                 try {
-                    Document document = Jsoup.connect(getResources().getString(R.string.KoBe)).get();
+                    Document document = Jsoup.connect(newsAddress).get();
                     Title = document.select("div.result");
                     Map<String,Object> map;
                     end = end + 8 > Title.size() ? Title.size():end + 8;

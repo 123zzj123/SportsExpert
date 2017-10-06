@@ -5,16 +5,18 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -35,18 +37,71 @@ public class KnowledgeActivity extends FragmentActivity{
     private AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
     private int count = 600;
     private String[] URLPath;
-    private Boolean[][] IsDoneLoad = new Boolean[12][50];
+    //private Boolean[][] IsDoneLoad = new Boolean[12][50];
     private Button KnowLedge;
     private Button Camera;
     private Button Voice;
+    private Handler handler;
+    private String[] SportsItem;
+    private List<Data> data = new ArrayList<Data>();
+    private int[] ItemNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_knowledge);
         initIndicator();
-        initView();
-        iniButton();
+        IniMessage();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == 1) {
+                    initItem();
+                    initView();
+                    iniButton();
+                }
+            }
+        };
+    }
+
+    private  void IniMessage() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = new JSONObject();
+                JSONArray items = new JSONArray();
+                jsonObject = tool.getList();
+                try {
+                    items = jsonObject.getJSONArray("result");
+                    SportsItem = new String[items.length()];
+                    ItemNum = new int[items.length()];
+                    for(int i = 0; i < items.length(); i++) {
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("sid",i);
+                        JSONObject jsonObject2 = tool.getObject(jsonObject1);
+                        JSONArray item = jsonObject2.getJSONArray("result");
+                        ItemNum[i] = item.length();
+                        for(int j = 0; j < item.length(); j++) {
+                            JSONObject jsonObject3 = item.getJSONObject(j);
+                            Data temp = new Data();
+                            temp.sid = i;
+                            temp.name = jsonObject3.getString("name");
+                            temp.pos = j;
+                            temp.picAddress = jsonObject3.getString("picAddress");
+                            temp.contantAddress = jsonObject3.getString("contantAddress");
+                            temp.newsAddress = jsonObject3.getString("newsAddress");
+                            data.add(temp);
+                        }
+                        SportsItem[i] = items.getJSONObject(i).getString("sname");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Message msg = new Message();
+                msg.what = 1;
+                handler.sendMessage(msg);
+            }
+        }).start();
     }
 
     //顶部导航栏
@@ -68,7 +123,10 @@ public class KnowledgeActivity extends FragmentActivity{
                         adViewPager.setCurrentItem(position);
                     }
                 }).commit();
-        listViews = new ArrayList<View>();
+    }
+
+    private void initItem() {
+        indicatorView.text(SportsItem).commit();
     }
 
     public static int dip2px(Context context, float dipValue){
@@ -91,7 +149,6 @@ public class KnowledgeActivity extends FragmentActivity{
     private void initView() {
         linear01 = (LinearLayout) findViewById(R.id.view_pager_content);
         listView = new ArrayList<Map<String, Object>>();
-        //listView = new ArrayList<Map<String, Drawable>>();
         // 创建ViewPager
         adViewPager = new ViewPager(this);
         adViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -112,7 +169,7 @@ public class KnowledgeActivity extends FragmentActivity{
         });
         linear01.addView(adViewPager);
         IniImageURL();
-        getView();
+        getGridView();
         // 将GridView添加到ViewPager显示
         adViewPager.setAdapter(adapter);
         //adViewPager.setOnPageChangeListener(new AdPageChangeListener());
@@ -122,96 +179,68 @@ public class KnowledgeActivity extends FragmentActivity{
             view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //Map<String, Object> item = (Map<String, Object>) parent.getItemAtPosition(position);
-                    //Toast.makeText(getApplicationContext(), item.get("image").toString(), 0).show();
-                    Toast.makeText(KnowledgeActivity.this,"hello"+ view.getId(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KnowledgeActivity.this,"hello"+ parent.getId(),Toast.LENGTH_SHORT).show();
+                    int Start = 0;
+                    for(int i = 0; i < parent.getId(); i++) {
+                        Start += ItemNum[i];
+                    }
                     Intent intent = new Intent(KnowledgeActivity.this,DetailActivity.class);
+                    intent.putExtra("contantAddress",data.get(Start + position).contantAddress);
+                    intent.putExtra("newsAddress",data.get(Start + position).newsAddress);
                     startActivity(intent);
                 }
             });
         }
     }
 
-    private void getView() {
-        int[] intView = new int[600];
-        for (int i = 0; i < intView.length; i++) {
-            intView[i] = R.mipmap.ic_launcher;
-            Map<String, Object> mapView = new HashMap<String, Object>();
-            mapView.put("image", intView[i]);
-            listView.add(mapView);
-        }
-        getGridView();
-    }
-
     private void getGridView() {
         boolean bool = true;
-        while (bool) {
-            //int result = next + 10;
-            int result = next + 50;
-            if (listView.size() != 0 && result <= listView.size()) {
-                GridView gridView = new GridView(this);
-                gridView.setId(result/50 - 1);
-                gridView.setNumColumns(3);
-                List<Map<String, Object>> gridlist = new ArrayList<Map<String, Object>>();
-                //List<Map<String, Drawable>> gridlist = new ArrayList<Map<String, Drawable>>();
-                for (int i = next; i < result; i++) {
-                    gridlist.add(listView.get(i));
-                }
-                MyAdapter myAdapter = new MyAdapter(gridlist,IsDoneLoad[result/50 - 1],result/50-1);
-                gridView.setAdapter(myAdapter);
-                next = result;
-                gridViewlist.add(gridView);
-
-            } else if (result - listView.size() < 50) {
-                List<Map<String, Object>> gridlist = new ArrayList<Map<String, Object>>();
-                //List<Map<String, Drawable>> gridlist = new ArrayList<Map<String, Drawable>>();
-                for (int i = next; i < listView.size(); i++) {
-                    gridlist.add(listView.get(i));
-                }
-                GridView gridView = new GridView(this);
-                gridView.setNumColumns(3);
-                MyAdapter myAdapter = new MyAdapter(gridlist,IsDoneLoad[result/50 - 1], result/50-1);
-                gridView.setAdapter(myAdapter);
-                next = listView.size() - 1;
-                gridViewlist.add(gridView);
-                bool = false;
-            } else {
-                bool = false;
+        int num = 0;
+        for(int i = 0; i < ItemNum.length; i++) {
+            GridView gridView = new GridView(this);
+            gridView.setId(i);
+            gridView.setNumColumns(3);
+            List<Map<String, Object>> gridlist = new ArrayList<Map<String, Object>>();
+            for(int j = 0; j < ItemNum[i]; j++) {
+                gridlist.add(listView.get(num));
+                num++;
             }
+            MyAdapter myAdapter = new MyAdapter(gridlist,i,ItemNum[i]);
+            gridView.setAdapter(myAdapter);
+            gridViewlist.add(gridView);
         }
         adapter = new AdPageAdapter(gridViewlist);
-
     }
 
     //初始化图片链接
     private  void  IniImageURL() {
-        URLPath = new String[600];
-        drawables = new Drawable[600];
-        for(int i = 0; i < 600; i++) {
-            URLPath[i] = "http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg";
-            IsDoneLoad[i/50][i%50] = false;
-            loadImage(URLPath[i],i);
+        URLPath = new String[data.size()];
+        drawables = new Drawable[data.size()];
+        for(int i = 0; i < data.size(); i++) {
+            Map<String,Object> temp = new HashMap<String, Object>();
+            temp.put("image",R.mipmap.ic_launcher);
+            URLPath[i] = data.get(i).picAddress;
+            loadImage(URLPath[i],i,data.get(i).sid,data.get(i).pos);
+            listView.add(temp);
         }
     }
 
     //采用Handler+Thread+封装外部接口
-    private void loadImage(final String url, final int id) {
+    private void loadImage(final String url, final int id, final int sid, final int pos) {
 //如果缓存过就会从缓存中取出图像，ImageCallback接口中方法也不会被执行
         Drawable cacheImage = asyncImageLoader.loadDrawable(url,new AsyncImageLoader.ImageCallback() {
             //请参见实现：如果第一次加载url时下面方法会执行
             public void imageLoaded(Drawable imageDrawable) {
                 drawables[id] = imageDrawable;
-                IsDoneLoad[id/50][id%50] = true;
-                GridView view = (GridView) gridViewlist.get(id/50);
-                ((MyAdapter)view.getAdapter()).SetDownLaod(IsDoneLoad[id/50]);
+                GridView view = (GridView) gridViewlist.get(sid);
+                ((MyAdapter)view.getAdapter()).SetDownLaod(pos);
                 ((MyAdapter)view.getAdapter()).notifyDataSetChanged();
             }
         });
         if(cacheImage!=null){
             drawables[id] = cacheImage;
-            IsDoneLoad[id/50][id%50] = true;
-            GridView view = (GridView) gridViewlist.get(id/50);
-            ((MyAdapter)view.getAdapter()).SetDownLaod(IsDoneLoad[id/50]);
+            GridView view = (GridView) gridViewlist.get(sid);
+            ((MyAdapter)view.getAdapter()).SetDownLaod(pos);
             ((MyAdapter)view.getAdapter()).notifyDataSetChanged();
         }
     }
@@ -247,18 +276,24 @@ public class KnowledgeActivity extends FragmentActivity{
 
     private class MyAdapter extends BaseAdapter {
         List<Map<String, Object>> Listgrid;
-        Boolean[] DoneLoad = new Boolean[50];
+        Boolean[] DoneLoad;
         int ID;
         //List<Map<String, Drawable>> listgrid;
 
-        private MyAdapter(List<Map<String, Object>> listgrid, Boolean[] doneLoad, int id) {
+        private MyAdapter(List<Map<String, Object>> listgrid, int id, int Size) {
             this.Listgrid = listgrid;
-            DoneLoad = doneLoad;
-            ID = id;
+            DoneLoad = new Boolean[Size];
+            for(int i = 0; i < Size; i++) {
+                DoneLoad[i] = false;
+            }
+            ID = 0;
+            for(int i = 0; i < id; i++) {
+                ID += ItemNum[i];
+            }
         }
 
-        public void SetDownLaod(Boolean[] doneLoad){
-            DoneLoad = doneLoad;
+        public void SetDownLaod(int pos){
+            DoneLoad[pos] = true;
         }
 
         @Override
@@ -284,7 +319,7 @@ public class KnowledgeActivity extends FragmentActivity{
                 getViewLinear.setBackgroundResource(Integer.parseInt(Listgrid.get(position).get("image").toString()));
             }
             else {
-                getViewLinear.setImageDrawable(drawables[ID * 50 + position]);
+                getViewLinear.setImageDrawable(drawables[ID + position]);
             }
             return convertView;
         }

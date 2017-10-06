@@ -42,17 +42,20 @@ public class DetailActivity extends Activity {
     private List<String> Info1;
     private List<String> Info2;
     private AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
+    private String contantAddress;
+    private String newsAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        contantAddress = getIntent().getStringExtra("contantAddress");
+        newsAddress = getIntent().getStringExtra("newsAddress");
         //getSupportActionBar().hide();
         Info1 = new ArrayList<String>();
         Info2 = new ArrayList<String>();
         NameTview = (TextView) findViewById(R.id.Name);
         IdentityTview = (TextView) findViewById(R.id.Identity);
         PhotoShow = (ViewPager)findViewById(R.id.Photo);
-        //PhotoLView = (LinearLayout) findViewById(R.id.PhotoShow);
         IntroduceTview = (TextView)findViewById(R.id.Introduce);
         BasicInfoView = (GridView)findViewById(R.id.BasicInfo);
         myAdapter = new MyPagerAdapter();
@@ -64,6 +67,7 @@ public class DetailActivity extends Activity {
             public void onClick(View view) {
                 Toast.makeText(DetailActivity.this,"正在前往新闻界面",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(DetailActivity.this,NewsActivity.class);
+                intent.putExtra("newsAddress",newsAddress);
                 startActivity(intent);
             }
         });
@@ -102,7 +106,7 @@ public class DetailActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    Document document = Jsoup.connect(getResources().getString(R.string.KoBeDetail)).get();
+                    Document document = Jsoup.connect(contantAddress).get();
                     Elements Title = document.select("dd.lemmaWgt-lemmaTitle-title");
                     Name = Title.select("h1").text();
                     Identity = Title.select("h2").text();

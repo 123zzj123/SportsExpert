@@ -1,4 +1,4 @@
-package com.example.billz.myapplication;
+package cn.kingsleychung.sportsexpert;
 
 /**
  * Created by billz on 2017/9/19.

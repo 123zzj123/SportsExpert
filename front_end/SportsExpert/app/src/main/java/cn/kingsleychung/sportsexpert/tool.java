@@ -1,4 +1,4 @@
-package com.example.billz.myapplication;
+package cn.kingsleychung.sportsexpert;
 
 import android.util.Log;
 import org.json.JSONObject;
